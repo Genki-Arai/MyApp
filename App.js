@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function App() {
   return (
@@ -9,6 +9,7 @@ export default function App() {
       <StatusBar style="auto" />
       <Text>こんにちは Expo</Text>
       <Button title="ボタン" onPress={() => alert("ボタンが押されました")} />
+      <TextInput style={styles.input} placeholder="abcdefg"></TextInput>
     </View>
   );
 }
@@ -20,4 +21,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  input:{
+    backgroundColor: "#fff",
+    height: 40,
+    width: 200,
+    padding: 8,
+    borderWidth: 1,
+  }
 });
+
+
