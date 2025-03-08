@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import Compo from "./components/Compo";
 
 export default function App() {
   return (
@@ -10,6 +11,7 @@ export default function App() {
       <Text>こんにちは Expo</Text>
       <Button title="ボタン" onPress={() => alert("ボタンが押されました")} />
       <TextInput style={styles.input} placeholder="abcdefg"></TextInput>
+      <Compo />
     </View>
   );
 }
@@ -29,5 +31,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   }
 });
+
 
 
