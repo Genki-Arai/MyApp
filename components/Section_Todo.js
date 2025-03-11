@@ -1,4 +1,4 @@
-import { FlatList, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Button, FlatList, Platform, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import React from "react";
 
 const StatusbarHeight = Platform.OS === "ios" ? 44 : 56;
@@ -11,6 +11,24 @@ export default function Section_Todo() {
         {index: 3, title: "todo3", done: false}],
         currentIndex: 3,
     });
+    const [inputText, setInputText] = React.useState("");
+
+    const addTodo = () => {
+        if(!inputText){
+            return;
+        }
+        const newTodo = {
+            index: todo.currentIndex + 1,
+            title: inputText,
+            done: false,
+        };
+        setTodo({
+            todo: [...todo.todo, newTodo],
+            currentIndex: todo.currentIndex + 1,
+        })
+        setInputText("");
+    }
+
 
   return (
     <View style={styles.container}>
@@ -26,7 +44,12 @@ export default function Section_Todo() {
             ></FlatList>
       </ScrollView>
       <View style={styles.input}>
-        <Text>Footer</Text>
+        <TextInput
+            placeholder="Todoを入力してください"
+            onChangeText={setInputText}
+            value={inputText}
+        ></TextInput>
+        <Button title="追加" onPress={addTodo}></Button>
       </View>
     </View>
   );
@@ -36,7 +59,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#c0a2c7",
-    marginTop: StatusbarHeight,
+    marginVertical: StatusbarHeight,
   },
   filter: {
     height: 30,
