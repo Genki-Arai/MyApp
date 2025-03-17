@@ -11,6 +11,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React from "react";
+import AsyncStorage from "expo-sqlite/kv-store";
+import Section_Todo_Conpo from "./Section_Todo_Compo";
 
 // おそらく、StatusbarHeightがあるため、Web版で表示されない
 const StatusbarHeight = Platform.OS === "ios" ? 44 : 56;
@@ -53,6 +55,54 @@ export default function Section_Todo() {
     );
   };
 
+  const loadTodo = () => {
+    AsyncStorage.getItem("todo").then((value) => {
+      const todo = JSON.parse(value);
+      const index = todo.length > 0 ? todo[todo.length - 1].index : 0;
+      setTodo({
+        todo: todo,
+        currentIndex: index,
+      });
+    });
+  };
+
+  const loadTodo2 = () => {
+    (async () => {
+      const value = await AsyncStorage.getItem("todo");
+      if(!value) {
+        return;
+      }
+      const todo = JSON.parse(value);
+      const index = todo.length > 0 ? todo[todo.length - 1].index : 0;
+      setTodo({
+        todo: todo,
+        currentIndex: index,
+      });
+    }).catch((error) => {
+      console.error(error);
+    });
+  };
+
+  const saveTodo = async (todo) => {
+    try{
+      const todoString = JSON.stringify(todo);
+      await AsyncStorage.setItem("todo", todoString);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const onTapTodo = (todoItem) => {
+    const newTodo = todo.todo;
+    const index = todo.todo.indexOf(todoItem);
+    todoItem.done = !todoItem.done;
+    newTodo[index] = todoItem;
+    setTodo({
+      todo: newTodo,
+      currentIndex: todo.currentIndex,
+    });
+  }
+
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <View style={styles.filter}>
@@ -66,19 +116,22 @@ export default function Section_Todo() {
           <Button title="検索" onPress={filterTodo}></Button>
         </View>
       </View>
-      <ScrollView style={styles.todolist}>
+      {/* <ScrollView style={styles.todolist}> */}
+      <View style={styles.todolist}>
         <Text>ScrollView</Text>
         <FlatList
           data={todoList}
           renderItem={({ item }) => (
-            <Text key={item.title + "_" + item.index}>{item.title}</Text>
+            // <Text key={"todo_" + item.index}>{item.title}</Text>
+            <Section_Todo_Conpo title={item.title} done={item.done} onPress={() => onTapTodo(item)} />
           )}
           keyExtractor={(item, index) => "todo_" + item.index}
         ></FlatList>
         <TouchableOpacity>
           <Text>タップしてください</Text>
         </TouchableOpacity>
-      </ScrollView>
+        </View>
+      {/* </ScrollView> */}
       <View style={styles.inputArea}>
         <TextInput
           placeholder="Todoを入力してください"
