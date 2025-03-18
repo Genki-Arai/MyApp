@@ -8,7 +8,7 @@ export default function OperatorButton(props) {
             // borderColor: "black",
             // fontSize: 50,
             backgroundColor: "yellow",
-            flex: props.flex,
+            flexGrow: props.flexGrow,
         }
     })
     return (

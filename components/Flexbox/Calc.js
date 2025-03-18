@@ -5,34 +5,41 @@ import OperatorButton from "./OperatorButton";
 export default function Calc() {
   return (
     <View style={styles.container}>
-        <View style={styles.num9to7}>
-            <OperatorButton flex="2" operator="AC" />
-            <OperatorButton flex="1" operator="C" />
-            <OperatorButton flex="1" operator="+" />
+      <View style={styles.buttonLineTop3}>
+        <View style={styles.buttonLayer}>
+          <OperatorButton flexGrow="2" operator="AC" />
+          <OperatorButton operator="C" />
+          <OperatorButton operator="+" />
         </View>
-      <View style={styles.num9to7}>
-        <NumButton number="7" />
-        <NumButton number="8" />
-        <NumButton number="9" />
-        <OperatorButton operator="-" />
+        <View style={styles.buttonLayer}>
+          <NumButton number="7" />
+          <NumButton number="8" />
+          <NumButton number="9" />
+          <OperatorButton operator="-" />
+        </View>
+        <View style={styles.buttonLayer}>
+          <NumButton number="4" />
+          <NumButton number="5" />
+          <NumButton number="6" />
+          <OperatorButton operator="×" />
+        </View>
       </View>
-      <View style={styles.num6to4}>
-        <NumButton number="4" />
-        <NumButton number="5" />
-        <NumButton number="6" />
-        <OperatorButton operator="×" />
-      </View>
-      <View style={styles.num3to1}>
-        <NumButton number="1" />
-        <NumButton number="2" />
-        <NumButton number="3" />
-        <OperatorButton operator="÷" />
-      </View>
-      <View style={styles.num3to1}>
-        <NumButton number="0" />
-        <OperatorButton operator="." />
-        <OperatorButton operator="+/-" />
-        <OperatorButton operator="=" />
+      <View style={styles.buttonLineBottom2}>
+        <View style={styles.button1to0}>
+          <View style={styles.buttonLayer}>
+            <NumButton number="1" />
+            <NumButton number="2" />
+            <NumButton number="3" />
+          </View>
+          <View style={styles.buttonLayer}>
+            <NumButton number="0" />
+            <OperatorButton operator="." />
+            <OperatorButton operator="/" />
+          </View>
+        </View>
+        <View style={styles.equalButton}>
+          <OperatorButton operator="=" />
+        </View>
       </View>
     </View>
   );
@@ -45,30 +52,50 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#84b9cb",
   },
-  num9to7: {
+  buttonLineTop3: {
+    flex: 3,
+    flexDirection: "column",
+    justifyContent: "space-around",
+    alignItems: "stretch",
+    width: "100%",
+  },
+  buttonLineBottom2: {
+    flex: 2,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "stretch",
+  },
+  buttonLayer: {
     flex: 1,
-    justifyContent: "space-evenly",
+    justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",
     borderWidth: 1,
-    borderColor: "black",
+    // borderColor: "black",
   },
-  num6to4: {
-    flex: 1,
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  num3to1: {
-    flex: 1,
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  num0: {
+  equalButton: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
+    alignItems: "stretch",
   },
+  button1to0: {
+    flex: 3,
+    flexDirection: "column",
+    justifyContent: "space-around",
+    alignItems: "stretch",
+  },
+  
 });
+
+{
+  /** 
+    [          ]
+    [          ]
+    [          ]
+    [ AC ][C][+]
+    [7][8][9][-]
+    [4][5][6][*]
+    [1][2][3][=]
+    [0][.][/][=]
+*/
+}
