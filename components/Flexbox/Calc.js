@@ -1,44 +1,40 @@
 import { View, StyleSheet } from "react-native";
-import NumButton from "./NumButton";
-import OperatorButton from "./OperatorButton";
+import CalcButton from "./CalcButton";
+import ButtonLine from "./ButtonLine";
 
 export default function Calc() {
+
+  const buttons = [
+    [{ value: "AC", flex: 2 }, { value: "C" }, { value: "+" }],
+    [{ value: "7" }, { value: "8" }, { value: "9" }, { value: "-" }],
+    [{ value: "4" }, { value: "5" }, { value: "6" }, { value: "×" }],
+    [{ value: "1" }, { value: "2" }, { value: "3" }],
+    [{ value: "0" }, { value: "." }, { value: "/" }],
+    [{ value: "=" }],
+  ];
   return (
     <View style={styles.container}>
-      <View style={styles.buttonLineTop3}>
-        <View style={styles.buttonLayer}>
-          <OperatorButton flexGrow="2" operator="AC" />
-          <OperatorButton operator="C" />
-          <OperatorButton operator="+" />
-        </View>
-        <View style={styles.buttonLayer}>
-          <NumButton number="7" />
-          <NumButton number="8" />
-          <NumButton number="9" />
-          <OperatorButton operator="-" />
-        </View>
-        <View style={styles.buttonLayer}>
-          <NumButton number="4" />
-          <NumButton number="5" />
-          <NumButton number="6" />
-          <OperatorButton operator="×" />
-        </View>
+      <View style={styles.buttonLine}>
+        <ButtonLine buttons={buttons[0]} />
       </View>
+      <View style={styles.buttonLine}>
+        <ButtonLine buttons={buttons[1]} />
+      </View>
+      <View style={styles.buttonLine}>
+        <ButtonLine buttons={buttons[2]} />
+      </View>
+
       <View style={styles.buttonLineBottom2}>
         <View style={styles.button1to0}>
-          <View style={styles.buttonLayer}>
-            <NumButton number="1" />
-            <NumButton number="2" />
-            <NumButton number="3" />
+          <View style={styles.buttonLine}>
+            <ButtonLine buttons={buttons[3]} />
           </View>
-          <View style={styles.buttonLayer}>
-            <NumButton number="0" />
-            <OperatorButton operator="." />
-            <OperatorButton operator="/" />
+          <View style={styles.buttonLine}>
+            <ButtonLine buttons={buttons[4]} />
           </View>
         </View>
         <View style={styles.equalButton}>
-          <OperatorButton operator="=" />
+          <ButtonLine buttons={buttons[5]} />
         </View>
       </View>
     </View>
@@ -52,25 +48,17 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#84b9cb",
   },
-  buttonLineTop3: {
-    flex: 3,
-    flexDirection: "column",
-    justifyContent: "space-around",
-    alignItems: "stretch",
-    width: "100%",
-  },
   buttonLineBottom2: {
     flex: 2,
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "stretch",
   },
-  buttonLayer: {
+  buttonLine: {
     flex: 1,
     justifyContent: "space-around",
-    alignItems: "center",
+    alignItems: "stretch",
     flexDirection: "row",
-    borderWidth: 1,
     // borderColor: "black",
   },
   equalButton: {
@@ -84,10 +72,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "stretch",
   },
-  
 });
 
-{
+
   /** 
     [          ]
     [          ]
@@ -98,4 +85,3 @@ const styles = StyleSheet.create({
     [1][2][3][=]
     [0][.][/][=]
 */
-}
