@@ -13,7 +13,7 @@ export default function RPNCalc() {
         <OutputCalc formula={formula} result={result} />
       </View>
       <View style={styles.inputArea}>
-        <Calc setFormula={setFormula} setResult={setResult} />
+        <Calc formula={formula} setFormula={setFormula} result={result} setResult={setResult} />
       </View>
     </View>
   );

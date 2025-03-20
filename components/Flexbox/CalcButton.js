@@ -22,7 +22,7 @@ export default function CalcButton(props) {
     },
   });
   return (
-    <TouchableOpacity style={styles.btn}>
+    <TouchableOpacity style={styles.btn} onPress={props.buttonEvent}>
       <Text>{props.value}</Text>
     </TouchableOpacity>
   );

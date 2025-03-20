@@ -9,7 +9,7 @@ export default function ButtonLine(props) {
         <React.Fragment>
             {props.buttons.map((button) => {
                 return (
-                    <CalcButton value={button.value} flex={button.flex} key={button.value} />
+                    <CalcButton value={button.value} flex={button.flex} buttonEvent={button.buttonEvent} key={button.value} />
                 );
             })}
         </React.Fragment>
