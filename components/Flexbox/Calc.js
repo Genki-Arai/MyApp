@@ -44,47 +44,24 @@ export default function Calc(props) {
       return props.setFormula([value]);
     }
 
-    // if (props.formula[props.formula.length - 1] === 0) {
-    //   if (value === 0) {
-    //     if (props.formula.length === 1) {
-    //       return;
-    //     }
-    //     if (!(props.formula[props.formula.length - 2] === ".")) {
-    //       return;
-    //     }
-    //   } else {
-    //     // return props.setFormula([...props.formula.slice(0, -1), String(props.formula[props.formula.length - 1]) + value]);
-    //   }
-    // }
-
-    // // 配列の要素数が1のとき（１要素目は数値しか入らない）
-    // if (props.formula.length === 1) {
-    //   return props.setFormula([String(props.formula[0]) + value]);
-    // }
-    // // 配列の末尾要素が演算子か小数点のとき
-    // if (isNaN(Number(props.formula[props.formula.length - 1]))) {
-    //   return props.setFormula([...props.formula, value]);
-    // }
-    // props.setFormula([
-    //   ...props.formula.slice(0, -1),
-    //   String(props.formula[props.formula.length - 1]) + value,
-    // ]);
-    // props.setResult(Number("-"));
-
+    // 入力値が0のとき
     if (value === 0) {
+      // 配列の要素が0だけの場合
       if (
         props.formula[props.formula.length - 1] === 0 &&
         props.formula.length === 1
       ) {
         return;
       }
+      // 式の最後の入力値が整数の0の場合
       if (
         props.formula[props.formula.length - 1] === 0 &&
         props.formula[props.formula.length - 2] !== "."
       ) {
         return;
       }
-      if(isNaN(Number(props.formula[props.formula.length - 1]))) {
+      // 式の最後の入力値が演算子または小数点の場合
+      if (isNaN(Number(props.formula[props.formula.length - 1]))) {
         return props.setFormula([...props.formula, value]);
       }
       props.setFormula([
@@ -92,19 +69,23 @@ export default function Calc(props) {
         String(props.formula[props.formula.length - 1]) + value,
       ]);
     } else {
+      // 入力値が0以外
+      // 式の入力値が0だけの場合
       if (
         props.formula[props.formula.length - 1] === 0 &&
         props.formula.length === 1
       ) {
         return props.setFormula([value]);
       }
+      // 式の最後の入力値が整数の0の場合
       if (
         props.formula[props.formula.length - 1] === 0 &&
         props.formula[props.formula.length - 2] !== "."
       ) {
         return props.setFormula([...props.formula.slice(0, -1), value]);
       }
-      if(isNaN(Number(props.formula[props.formula.length - 1]))) {
+      // 式の最後の入力値が演算子または小数点の場合
+      if (isNaN(Number(props.formula[props.formula.length - 1]))) {
         return props.setFormula([...props.formula, value]);
       }
       props.setFormula([
@@ -148,13 +129,68 @@ export default function Calc(props) {
   };
 
   // 計算処理を行う関数
-  const onpressEqual = () => {};
+  const onpressEqual = () => {
+    let formulaInRPN = [];
+    let stack = [];
+    let formula = [...props.formula];
+
+    // 乗算と除算記号を逆ポーランド記法に変換
+    for (let i = 0; i < formula.length; i++) {
+      switch (formula[i]) {
+        case "+":
+        case "-":
+          if (stack.length > 0) {
+            for (let j = 0; j < stack.length; j++) {
+              formulaInRPN.push(stack.pop());
+            }
+          }
+          stack.push(formula[i]);
+          break;
+        case "×":
+        case "÷":
+          if (
+            stack[stack.length - 1] == "×" ||
+            stack[stack.length - 1] == "÷"
+          ) {
+            formulaInRPN.push(stack.pop());
+          }
+          stack.push(formula[i]);
+          break;
+        default:
+          formulaInRPN.push(formula[i]);
+      }
+    }
+    while (stack.length > 0) {
+      formulaInRPN.push(stack.pop());
+    }
+    // ポーランド記法になっているか確認のため
+    props.setFormula([...formulaInRPN]);
+
+    for (let i = 0; i < formulaInRPN.length; i++) {
+      switch (formulaInRPN[i]) {
+        case "+":
+        case "-":
+        case "×":
+        case "÷":
+      }
+    }
+  };
 
   // 入力値をクリアする関数
-  const onpressClear = () => {};
+  const onpressClear = () => {
+    if (!isNaN(Number(props.formula[props.formula.length - 1]))) {
+      return props.setFormula([...props.formula.slice(0, -1)]);
+    }
+    if (props.formula[props.formula.length - 1] === ".") {
+      return props.setFormula([...props.formula.slice(0, -1)]);
+    }
+  };
 
   // 最初からやり直す関数
-  const onpressAllClear = () => {};
+  const onpressAllClear = () => {
+    props.setFormula([]);
+    // props.setResult(0);
+  };
 
   return (
     <View style={styles.container}>
