@@ -10,9 +10,10 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useRef } from "react";
 import AsyncStorage from "expo-sqlite/kv-store";
 import Section_Todo_Conpo from "./Section_Todo_Compo";
+import { SearchBar } from "@rneui/base";
 
 // おそらく、StatusbarHeightがあるため、Web版で表示されない
 const StatusbarHeight = Platform.OS === "ios" ? 44 : 56;
@@ -27,8 +28,9 @@ export default function Section_Todo() {
     currentIndex: 3,
   });
   const [inputText, setInputText] = React.useState("");
-  const [filterText, setFilterText] = React.useState("");
+  // const [filterText, setFilterText] = React.useState("");
   const [todoList, setTodoList] = React.useState(todo.todo);
+  const  filterText = React.useRef('')
 
   const addTodo = () => {
     if (!inputText) {
@@ -50,7 +52,7 @@ export default function Section_Todo() {
   const filterTodo = () => {
     setTodoList(
       todo.todo.filter((todo) => {
-        return todo.title.includes(filterText);
+        return todo.title.includes(filterText.current);
       })
     );
   };
@@ -69,7 +71,7 @@ export default function Section_Todo() {
   const loadTodo2 = () => {
     (async () => {
       const value = await AsyncStorage.getItem("todo");
-      if(!value) {
+      if (!value) {
         return;
       }
       const todo = JSON.parse(value);
@@ -84,13 +86,13 @@ export default function Section_Todo() {
   };
 
   const saveTodo = async (todo) => {
-    try{
+    try {
       const todoString = JSON.stringify(todo);
       await AsyncStorage.setItem("todo", todoString);
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const onTapTodo = (todoItem) => {
     const newTodo = todo.todo;
@@ -101,11 +103,11 @@ export default function Section_Todo() {
       todo: newTodo,
       currentIndex: todo.currentIndex,
     });
-  }
+  };
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
-      <View style={styles.filter}>
+      {/* <View style={styles.filter}>
         <View style={styles.inputArea}>
           <TextInput
             style={styles.input}
@@ -115,7 +117,18 @@ export default function Section_Todo() {
           ></TextInput>
           <Button title="検索" onPress={filterTodo}></Button>
         </View>
-      </View>
+      </View> */}
+      <SearchBar
+        platform={Platform.OS}
+        cancelButtonTitle="cancel"
+        onChangeText={(text) => {
+          filterText.current = text;
+          filterTodo();
+        }}
+        onClear={() => filterText.current = ''}
+        value={filterText.current}
+        placeholder="検索文字を入力してください"
+      />
       {/* <ScrollView style={styles.todolist}> */}
       <View style={styles.todolist}>
         <Text>ScrollView</Text>
@@ -123,14 +136,18 @@ export default function Section_Todo() {
           data={todoList}
           renderItem={({ item }) => (
             // <Text key={"todo_" + item.index}>{item.title}</Text>
-            <Section_Todo_Conpo title={item.title} done={item.done} onPress={() => onTapTodo(item)} />
+            <Section_Todo_Conpo
+              title={item.title}
+              done={item.done}
+              onPress={() => onTapTodo(item)}
+            />
           )}
           keyExtractor={(item, index) => "todo_" + item.index}
         ></FlatList>
         <TouchableOpacity>
           <Text>タップしてください</Text>
         </TouchableOpacity>
-        </View>
+      </View>
       {/* </ScrollView> */}
       <View style={styles.inputArea}>
         <TextInput

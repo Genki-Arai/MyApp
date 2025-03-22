@@ -23,10 +23,10 @@ export default function App() {
     //   <TextInput style={styles.input} placeholder="abcdefg"></TextInput>
     //   <Compo />
     // </View>
-    // <Section_Todo />
     <View style={{ height: "100%", paddingVertical: paddingVertical }}>
+      <Section_Todo />
       {/* <Section_Flexbox /> */}
-      <RPNCalc />
+      {/* <RPNCalc /> */}
     </View>
   );
 }
