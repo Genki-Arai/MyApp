@@ -132,8 +132,23 @@ export default function Calc(props) {
   const onpressEqual = () => {
     let formulaInRPN = [];
     let stack = [];
-    let formula = [...props.formula];
+    let formula = [];
 
+    for (let i = 0; i < props.formula.length; i++) {
+      let addValue = props.formula[i];
+      if (
+        props.formula[i] === "." ||
+        String(props.formula[i - 1]).includes(".")
+      ) {
+        addValue = formula.pop() + props.formula[i];
+      }
+      if (formula.length === 0) {
+        formula = [addValue];
+      } else {
+        formula = [...formula, addValue];
+      }
+      // props.setFormula([...formula])
+    }
     // 乗算と除算記号を逆ポーランド記法に変換
     for (let i = 0; i < formula.length; i++) {
       switch (formula[i]) {
@@ -164,16 +179,38 @@ export default function Calc(props) {
       formulaInRPN.push(stack.pop());
     }
     // ポーランド記法になっているか確認のため
-    props.setFormula([...formulaInRPN]);
+    // props.setFormula([...formulaInRPN]);
 
-    for (let i = 0; i < formulaInRPN.length; i++) {
-      switch (formulaInRPN[i]) {
+    // 計算機能
+
+    formulaInRPN.forEach((value) => {
+      switch (value) {
         case "+":
+          const addNum = Number(stack.pop());
+          const addedNum = Number(stack.pop());
+          stack.push(addedNum + addNum);
+          break;
         case "-":
+          const subtractNum = Number(stack.pop());
+          const subtractedNum = Number(stack.pop());
+          stack.push(subtractedNum - subtractNum);
+          break;
         case "×":
+          const multiplyNum = Number(stack.pop());
+          const multipliedNum = Number(stack.pop());
+          stack.push(multipliedNum * multiplyNum);
+          break;
         case "÷":
+          const divideNum = Number(stack.pop());
+          const dividedNum = Number(stack.pop());
+          stack.push(dividedNum / divideNum);
+          break;
+        default:
+          stack.push(value);
+          break;
       }
-    }
+    });
+    props.setResult(stack[0]);
   };
 
   // 入力値をクリアする関数

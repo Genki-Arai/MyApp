@@ -4,7 +4,7 @@
     "slug": "MyApp",
     "version": "1.0.0",
     "newArchEnabled": true,
-    "orientation": "portrait",
+    "orientation": "default",
     "plugins": [
       "expo-sqlite"
     ]
